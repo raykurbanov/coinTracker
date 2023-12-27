@@ -1,20 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [dataset, setData] = useState([]);
   useEffect(() => {
     const fetchCryptoList = async () => {
       try {
         const response = await axios.get(
-          "https://api.binance.us/api/v3/ticker/price"
+          "https://api.coinlore.net/api/tickers/?start=0&limit=100"
         );
 
         // Extract the cryptocurrency data from the response
+        // console.log(response.data);
+
+        console.log(response);
         console.log(response.data);
-        setData(response.data);
+        console.log(response.data["data"]);
+        setData(response.data["data"]);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -24,11 +27,17 @@ function App() {
   }, []);
   return (
     <div className="App">
-      <p>Price BTC: {data.find((el) => el.symbol === "BTCUSDT").price}</p>
-      <p>Price ADA: {data.find((el) => el.symbol === "ADAUSDT").price}</p>
-      <p>Price DOT: {data.find((el) => el.symbol === "DOTUSDT").price}</p>
-      <p>Price VET: {data.find((el) => el.symbol === "VETUSDT").price}</p>
-      <p>Price LINK: {data.find((el) => el.symbol === "LINKUSDT").price}</p>
+      <h2>Prices:</h2>
+      <ul>
+        {dataset.map((el, idx) => {
+          console.log(el);
+          return (
+            <li key={idx}>
+              {el.name}: {el.price_usd}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
